@@ -250,6 +250,7 @@ void escape_to_root_for_adb_root(void)
 }
 
 #ifdef CONFIG_KSU_SUSFS
+#include <linux/susfs.h>
 #define KERNEL_INIT_DOMAIN "u:r:init:s0"
 #define KERNEL_ZYGOTE_DOMAIN "u:r:zygote:s0"
 #define KERNEL_ZYGOTE_NEXT_DOMAIN "u:r:zygote_next:s0"
@@ -337,5 +338,11 @@ void susfs_set_batch_sid(void)
     susfs_set_sid(KERNEL_SU_CONTEXT, &susfs_ksu_sid);
     susfs_set_sid(KERNEL_INIT_DOMAIN, &susfs_init_sid);
     susfs_set_sid(KERNEL_PRIV_APP_DOMAIN, &susfs_priv_app_sid);
+    if (susfs_adbroot_type) {
+        susfs_add_sus_type("adbroot", susfs_adbroot_type);
+    }
+    if (susfs_su_type) {
+        susfs_add_sus_type("su", susfs_su_type);
+    }
 }
 #endif
