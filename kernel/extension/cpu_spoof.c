@@ -26,6 +26,7 @@
 #include <asm/cpu.h>
 #include <asm/cputype.h>
 #include <asm/cpufeature.h>
+#include <asm/cpucaps.h>
 #include <vdso/datapage.h>
 #include <vdso/clocksource.h>
 
@@ -114,6 +115,7 @@ static int set_spoof_cpu(const struct ksu_set_spoof_cpu_cmd *cmd)
             ++missing;
         }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0)
         unsigned long *elf_hwcap_bitmap =
             (unsigned long *)find_kernel_symbol_exact("elf_hwcap");
         if (elf_hwcap_bitmap) {
@@ -123,6 +125,17 @@ static int set_spoof_cpu(const struct ksu_set_spoof_cpu_cmd *cmd)
             pr_warn("ksu: set_spoof_cpu failed to resolve 'elf_hwcap'\n");
             ++missing;
         }
+#else
+        unsigned long *elf_hwcap_ptr =
+            (unsigned long *)find_kernel_symbol_exact("elf_hwcap");
+        if (elf_hwcap_ptr) {
+            *elf_hwcap_ptr = (cmd->hwcap & 0xffffffffUL) |
+                             ((cmd->hwcap2 & 0xffffffffUL) << 32);
+        } else {
+            pr_warn("ksu: set_spoof_cpu failed to resolve 'elf_hwcap'\n");
+            ++missing;
+        }
+#endif
 
         {
             unsigned int part = MIDR_PARTNUM(cmd->midr);
@@ -178,6 +191,7 @@ static int set_spoof_cpu(const struct ksu_set_spoof_cpu_cmd *cmd)
                     }
                 }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0)
                 {
                     enum vdso_clock_mode *vd_default =
                         (enum vdso_clock_mode *)find_kernel_symbol_exact(
@@ -189,6 +203,7 @@ static int set_spoof_cpu(const struct ksu_set_spoof_cpu_cmd *cmd)
                         ++missing;
                     }
                 }
+#endif
 
                 {
                     unsigned long *caps =
