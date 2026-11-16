@@ -19,7 +19,6 @@ bool ksu_exists(struct policydb *db, const char *type);
 
 // Return 1 when the type value is from the initial policy, 0 when it is not, and -1 when metadata is unavailable
 extern u32 ksu_original_types_limit;
-u32 ksu_get_type_value(struct policydb *db, const char *type_name);
 int ksu_type_is_original(struct policydb *db, u32 policy_generation, u32 type_value);
 bool ksu_set_original_types(struct policydb *db, struct policydb *orig_db, u32 policy_generation);
 bool ksu_advance_original_types(struct policydb *db, struct policydb *old_db, u32 old_policy_generation,

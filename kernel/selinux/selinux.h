@@ -48,8 +48,6 @@ void susfs_set_batch_sid(void);
 bool susfs_is_current_zygote_domain(void);
 bool susfs_is_current_ksu_domain(void);
 bool susfs_is_current_init_domain(void);
-extern u32 susfs_adbroot_type;
-extern u32 susfs_su_type;
 #endif
 
 #endif

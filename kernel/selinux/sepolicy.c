@@ -1111,12 +1111,6 @@ int ksu_type_is_original(struct policydb *db, u32 policy_generation, u32 type_va
     return type_value && type_value <= original_types_limit ? 1 : 0;
 }
 
-u32 ksu_get_type_value(struct policydb *db, const char *type_name)
-{
-    struct type_datum *type = (struct type_datum *)symtab_search(&db->p_types, type_name);
-    return type ? type->value : 0;
-}
-
 // Access vector rules
 bool ksu_allow(struct policydb *db, const char *src, const char *tgt, const char *cls, const char *perm)
 {

@@ -83,14 +83,6 @@ static int apply_kernelsu_rules_fn(void *ptr)
         pr_info("ksu_original_types_limit set to %u for < 5.10\n", db->p_types.nprim);
     }
 #endif
-#ifdef CONFIG_KSU_SUSFS
-    susfs_adbroot_type = ksu_get_type_value(db, "adbroot");
-    if (susfs_adbroot_type)
-        pr_info("susfs: found adbroot type: %u\n", susfs_adbroot_type);
-    susfs_su_type = ksu_get_type_value(db, "su");
-    if (susfs_su_type)
-        pr_info("susfs: found su type: %u\n", susfs_su_type);
-#endif
 
     ksu_type(db, KERNEL_SU_DOMAIN, "domain");
     ksu_permissive(db, KERNEL_SU_DOMAIN);
